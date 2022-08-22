@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace FlixtechsLabs\LaravelAuthorizer\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelAuthorizerCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-authorizer';
 
     public $description = 'My command';
 

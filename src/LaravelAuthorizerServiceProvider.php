@@ -2,9 +2,9 @@
 
 namespace FlixtechsLabs\LaravelAuthorizer;
 
+use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
 
 class LaravelAuthorizerServiceProvider extends PackageServiceProvider
 {

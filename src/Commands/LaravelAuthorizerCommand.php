@@ -4,7 +4,6 @@ namespace FlixtechsLabs\LaravelAuthorizer\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -27,14 +26,18 @@ class LaravelAuthorizerCommand extends Command
 
         if (is_null($name) && is_null($model)) {
             $this->generateAllPolicies();
-        }
 
-        if (is_null($model)) {
-            $this->generatePlainPolicy($name);
+            return self::SUCCESS;
         }
 
         if (is_null($name)) {
             $name = $model;
+        }
+
+        if (is_null($model)) {
+            $this->generatePlainPolicy($name);
+
+            return self::SUCCESS;
         }
 
         $this->generatePolicy($name, $model);
@@ -89,16 +92,20 @@ class LaravelAuthorizerCommand extends Command
             )
         );
 
-        (new Filesystem())->dumpFile($this->getPath($name), $compiled);
+        (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
     }
 
     public function getPolicyPath(string $name): string
     {
-        return $this->getPath($name);
+        return app_path('Policies/' . $this->getClassName($name) . '.php');
     }
 
     private function generatePolicy(string $name, string $model): void
     {
+        if (file_exists($this->getPolicyPath($name))) {
+            return;
+        }
+
         $compiled = collect([
             'name' => $name,
             'model' => $model,
@@ -125,7 +132,7 @@ class LaravelAuthorizerCommand extends Command
             file_get_contents($this->getStub())
         );
 
-        (new Filesystem())->dumpFile($this->getPath($name), $compiled);
+        (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
     }
 
     public function getNamespace(): string
@@ -135,7 +142,7 @@ class LaravelAuthorizerCommand extends Command
 
     public function getClassName(string $name): string
     {
-        if (Str::endsWith($name, 'policy')) {
+        if (Str::endsWith(Str::lower($name), 'policy')) {
             return Str::studly($name);
         }
 
@@ -150,11 +157,6 @@ class LaravelAuthorizerCommand extends Command
     public function getNamespacedUserModel(): string
     {
         return config('auth.providers.users.model');
-    }
-
-    public function getPath(string $name): string
-    {
-        return app_path('Policies/' . $this->getClassName($name) . '.php');
     }
 
     public function getStub(): string

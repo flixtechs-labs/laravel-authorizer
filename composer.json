@@ -19,6 +19,7 @@
         "php": "^8.1",
         "illuminate/contracts": "^9.0",
         "spatie/laravel-package-tools": "^1.9.2",
+        "spatie/laravel-permission": "^5.5",
         "symfony/filesystem": "^6.1"
     },
     "require-dev": {

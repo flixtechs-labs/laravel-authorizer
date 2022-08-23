@@ -29,6 +29,7 @@ class LaravelAuthorizerCommand extends Command
 
     /**
      * Run the command.
+     *
      * @return int
      */
     public function handle(): int
@@ -84,9 +85,9 @@ class LaravelAuthorizerCommand extends Command
                 }
 
                 return $reflection->isSubclassOf(Model::class) &&
-                    !$reflection->isAbstract();
+                    ! $reflection->isAbstract();
             })
-            ->map(fn($model) => Str::afterLast($model, '\\'));
+            ->map(fn ($model) => Str::afterLast($model, '\\'));
 
         $models->each(function (string $model) {
             $this->generatePolicy($model, $model);
@@ -96,16 +97,17 @@ class LaravelAuthorizerCommand extends Command
     /**
      * Generate a plain policy without a model.
      *
-     * @param string $name
+     * @param  string  $name
      * @return void
      */
     public function generatePlainPolicy(string $name): void
     {
         if (
             file_exists($this->getPolicyPath($name)) &&
-            !$this->option('force')
+            ! $this->option('force')
         ) {
             $this->error(sprintf('Policy "%s" already exists!', $name));
+
             return;
         }
 
@@ -114,8 +116,8 @@ class LaravelAuthorizerCommand extends Command
             'namespace' => $this->getNamespace(),
             'class' => $this->getClassName($name),
         ])->reduce(
-            fn($carry, $value, $key) => Str::replace(
-                '{{ ' . $key . ' }}',
+            fn ($carry, $value, $key) => Str::replace(
+                '{{ '.$key.' }}',
                 $value,
                 $carry
             )
@@ -127,25 +129,25 @@ class LaravelAuthorizerCommand extends Command
     /**
      * Generate a policy for a given model.
      *
-     * @param string $name
-     * @param string $model
+     * @param  string  $name
+     * @param  string  $model
      * @return void
      */
     private function generatePolicy(string $name, string $model): void
     {
         if (
             file_exists($this->getPolicyPath($name)) &&
-            !$this->option('force')
+            ! $this->option('force')
         ) {
             $this->error(sprintf('Policy "%s" already exists!', $name));
+
             return;
         }
 
         $compiled = collect([
             'name' => $name,
             'model' => $model,
-            'modelVariable' =>
-                strtolower($model) ===
+            'modelVariable' => strtolower($model) ===
                 strtolower(
                     Str::afterLast($this->getNamespacedUserModel(), '\\')
                 )
@@ -159,8 +161,8 @@ class LaravelAuthorizerCommand extends Command
             'namespacedUserModel' => $this->getNamespacedUserModel(),
             'user' => Str::afterLast($this->getNamespacedUserModel(), '\\'),
         ])->reduce(
-            static fn($old, $value, $key) => Str::replace(
-                '{{ ' . $key . ' }}',
+            static fn ($old, $value, $key) => Str::replace(
+                '{{ '.$key.' }}',
                 $value,
                 $old
             ),
@@ -177,7 +179,7 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getPolicyPath(string $name): string
     {
-        return app_path('Policies/' . $this->getClassName($name) . '.php');
+        return app_path('Policies/'.$this->getClassName($name).'.php');
     }
 
     /**
@@ -187,13 +189,13 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getNamespace(): string
     {
-        return app()->getNamespace() . 'Policies';
+        return app()->getNamespace().'Policies';
     }
 
     /**
      * Get the class name for the policy.
      *
-     * @param string $name The name of the policy
+     * @param  string  $name The name of the policy
      * @return string
      */
     public function getClassName(string $name): string
@@ -202,18 +204,18 @@ class LaravelAuthorizerCommand extends Command
             return Str::studly($name);
         }
 
-        return Str::studly($name) . 'Policy';
+        return Str::studly($name).'Policy';
     }
 
     /**
      * Get the namespace for the model.
      *
-     * @param string $model The name of the model
+     * @param  string  $model The name of the model
      * @return string
      */
     public function getNamespacedModel(string $model): string
     {
-        return app()->getNamespace() . 'Models\\' . Str::studly($model);
+        return app()->getNamespace().'Models\\'.Str::studly($model);
     }
 
     /**
@@ -233,6 +235,6 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getStub(): string
     {
-        return __DIR__ . '/stubs/policy.stub';
+        return __DIR__.'/stubs/policy.stub';
     }
 }

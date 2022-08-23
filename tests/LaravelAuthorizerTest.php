@@ -43,7 +43,7 @@ it('can create policies for all models', function () {
         'Order',
         'OrderItem',
     ])->each(
-        fn($model) => $this->artisan('make:model', [
+        fn ($model) => $this->artisan('make:model', [
             'name' => $model,
         ])
     );

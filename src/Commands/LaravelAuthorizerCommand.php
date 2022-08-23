@@ -28,16 +28,16 @@ class LaravelAuthorizerCommand extends Command
         if (is_null($name) && is_null($model)) {
             $this->generateAllPolicies();
         }
-        //
-        //        if (is_null($model)) {
-        //            $this->generatePlainPolicy($name);
-        //        }
-        //
-        //        if (is_null($name)) {
-        //            $name = $model;
-        //        }
-        //
-        //        $this->generatePolicy($name, $model);
+
+        if (is_null($model)) {
+            $this->generatePlainPolicy($name);
+        }
+
+        if (is_null($name)) {
+            $name = $model;
+        }
+
+        $this->generatePolicy($name, $model);
 
         return self::SUCCESS;
     }

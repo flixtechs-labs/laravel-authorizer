@@ -55,7 +55,7 @@ class GeneratePermissionsCommand extends Command
     protected function generatePermissionsForAllModels(): void
     {
         $this->getModels()->each(
-            fn (string $model) => $this->generatePermissions($model)
+            fn(string $model) => $this->generatePermissions($model)
         );
     }
 
@@ -70,7 +70,7 @@ class GeneratePermissionsCommand extends Command
         $permissions = config('authorizer.permissions');
 
         collect($permissions)->each(
-            fn (string $permission) => $this->generatePermission(
+            fn(string $permission) => $this->generatePermission(
                 $model,
                 $permission
             )
@@ -90,15 +90,13 @@ class GeneratePermissionsCommand extends Command
             Str::contains($permission, 'any') ||
             Str::contains($permission, 'all')
         ) {
-            return Permission::updateOrCreate([
-                'name' => $permission.
-                    ' '.
-                    Str::snake(Str::plural(Str::lower($model))),
-            ]);
+            return Permission::findOrCreate(
+                $permission . ' ' . Str::snake(Str::plural(Str::lower($model)))
+            );
         }
 
-        return Permission::updateOrCreate([
-            'name' => $permission.' '.Str::snake(Str::lower($model)),
-        ]);
+        return Permission::findOrCreate(
+            $permission . ' ' . Str::snake(Str::lower($model))
+        );
     }
 }

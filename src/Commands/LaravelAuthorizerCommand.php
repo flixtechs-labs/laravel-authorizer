@@ -2,17 +2,15 @@
 
 namespace FlixtechsLabs\LaravelAuthorizer\Commands;
 
+use FlixtechsLabs\LaravelAuthorizer\Commands\Traits\LocatesModels;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use ReflectionClass;
-use ReflectionException;
-use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 
 class LaravelAuthorizerCommand extends Command
 {
+    use LocatesModels;
+
     /**
      * The name and signature of the console command.
      *
@@ -67,31 +65,9 @@ class LaravelAuthorizerCommand extends Command
      */
     public function generateAllPolicies(): void
     {
-        $models = collect(File::allFiles(app_path()))
-            ->map(function (SplFileInfo $info) {
-                $path = $info->getRelativePathname();
-
-                return sprintf(
-                    '\%s%s',
-                    app()->getNamespace(),
-                    Str::replace('/', '\\', Str::beforeLast($path, '.'))
-                );
-            })
-            ->filter(function (string $class) {
-                try {
-                    $reflection = new ReflectionClass($class);
-                } catch (ReflectionException $throwable) {
-                    return false;
-                }
-
-                return $reflection->isSubclassOf(Model::class) &&
-                    !$reflection->isAbstract();
-            })
-            ->map(fn($model) => Str::afterLast($model, '\\'));
-
-        $models->each(function (string $model) {
-            $this->generatePolicy($model, $model);
-        });
+        $this->getModels()->each(
+            fn (string $model) => $this->generatePolicy($model, $model)
+        );
     }
 
     /**
@@ -104,7 +80,7 @@ class LaravelAuthorizerCommand extends Command
     {
         if (
             file_exists($this->getPolicyPath($name)) &&
-            !$this->option('force')
+            ! $this->option('force')
         ) {
             $this->error(sprintf('Policy "%s" already exists!', $name));
 
@@ -116,8 +92,8 @@ class LaravelAuthorizerCommand extends Command
             'namespace' => $this->getNamespace(),
             'class' => $this->getClassName($name),
         ])->reduce(
-            fn($carry, $value, $key) => Str::replace(
-                '{{ ' . $key . ' }}',
+            fn ($carry, $value, $key) => Str::replace(
+                '{{ '.$key.' }}',
                 $value,
                 $carry
             )
@@ -137,7 +113,7 @@ class LaravelAuthorizerCommand extends Command
     {
         if (
             file_exists($this->getPolicyPath($name)) &&
-            !$this->option('force')
+            ! $this->option('force')
         ) {
             $this->error(sprintf('Policy "%s" already exists!', $name));
 
@@ -147,8 +123,7 @@ class LaravelAuthorizerCommand extends Command
         $compiled = collect([
             'name' => $name,
             'model' => $model,
-            'modelVariable' =>
-                strtolower($model) ===
+            'modelVariable' => strtolower($model) ===
                 strtolower(
                     Str::afterLast($this->getNamespacedUserModel(), '\\')
                 )
@@ -162,8 +137,8 @@ class LaravelAuthorizerCommand extends Command
             'namespacedUserModel' => $this->getNamespacedUserModel(),
             'user' => Str::afterLast($this->getNamespacedUserModel(), '\\'),
         ])->reduce(
-            static fn($old, $value, $key) => Str::replace(
-                '{{ ' . $key . ' }}',
+            static fn ($old, $value, $key) => Str::replace(
+                '{{ '.$key.' }}',
                 $value,
                 $old
             ),
@@ -176,22 +151,22 @@ class LaravelAuthorizerCommand extends Command
     /**
      * Get the path to the policy.
      *
-     * @param string $name
+     * @param  string  $name
      * @return string
      */
     public function getPolicyPath(string $name): string
     {
-        return app_path('Policies/' . $this->getClassName($name) . '.php');
+        return app_path('Policies/'.$this->getClassName($name).'.php');
     }
 
     /**
-     * Get the policies namespace.
+     * Get the policies' namespace.
      *
      * @return string
      */
     public function getNamespace(): string
     {
-        return app()->getNamespace() . 'Policies';
+        return app()->getNamespace().'Policies';
     }
 
     /**
@@ -206,7 +181,7 @@ class LaravelAuthorizerCommand extends Command
             return Str::studly($name);
         }
 
-        return Str::studly($name) . 'Policy';
+        return Str::studly($name).'Policy';
     }
 
     /**
@@ -217,7 +192,7 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getNamespacedModel(string $model): string
     {
-        return app()->getNamespace() . 'Models\\' . Str::studly($model);
+        return app()->getNamespace().'Models\\'.Str::studly($model);
     }
 
     /**
@@ -237,6 +212,6 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getStub(): string
     {
-        return __DIR__ . '/stubs/policy.stub';
+        return __DIR__.'/stubs/policy.stub';
     }
 }

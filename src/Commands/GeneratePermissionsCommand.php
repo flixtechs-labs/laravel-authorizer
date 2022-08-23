@@ -2,18 +2,15 @@
 
 namespace FlixtechsLabs\LaravelAuthorizer\Commands;
 
+use FlixtechsLabs\LaravelAuthorizer\Commands\Traits\LocatesModels;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use ReflectionClass;
-use ReflectionException;
 use Spatie\Permission\Models\Permission;
-use SplFileInfo;
 
 class GeneratePermissionsCommand extends Command
 {
+    use LocatesModels;
+
     /**
      * The name and signature of the console command.
      *
@@ -58,7 +55,7 @@ class GeneratePermissionsCommand extends Command
     protected function generatePermissionsForAllModels(): void
     {
         $this->getModels()->each(
-            fn(string $model) => $this->generatePermissions($model)
+            fn (string $model) => $this->generatePermissions($model)
         );
     }
 
@@ -73,7 +70,7 @@ class GeneratePermissionsCommand extends Command
         $permissions = config('authorizer.permissions');
 
         collect($permissions)->each(
-            fn(string $permission) => $this->generatePermission(
+            fn (string $permission) => $this->generatePermission(
                 $model,
                 $permission
             )
@@ -83,8 +80,8 @@ class GeneratePermissionsCommand extends Command
     /**
      * Generate a permission for a given model.
      *
-     * @param string $model
-     * @param string $permission
+     * @param  string  $model
+     * @param  string  $permission
      * @return mixed
      */
     public function generatePermission(string $model, string $permission): mixed
@@ -94,45 +91,14 @@ class GeneratePermissionsCommand extends Command
             Str::contains($permission, 'all')
         ) {
             return Permission::updateOrCreate([
-                'name' =>
-                    $permission .
-                    ' ' .
+                'name' => $permission.
+                    ' '.
                     Str::snake(Str::plural(Str::lower($model))),
             ]);
         }
 
         return Permission::updateOrCreate([
-            'name' => $permission . ' ' . Str::snake(Str::lower($model)),
+            'name' => $permission.' '.Str::snake(Str::lower($model)),
         ]);
-    }
-
-    /**
-     * Get all models.
-     *
-     * @return array|Collection
-     */
-    public function getModels(): array|Collection
-    {
-        return collect(File::allFiles(app_path()))
-            ->map(function (SplFileInfo $info) {
-                $path = $info->getRelativePathname();
-
-                return sprintf(
-                    '\%s%s',
-                    app()->getNamespace(),
-                    Str::replace('/', '\\', Str::beforeLast($path, '.'))
-                );
-            })
-            ->filter(function (string $class) {
-                try {
-                    $reflection = new ReflectionClass($class);
-                } catch (ReflectionException $throwable) {
-                    return false;
-                }
-
-                return $reflection->isSubclassOf(Model::class) &&
-                    !$reflection->isAbstract();
-            })
-            ->map(fn($model) => Str::afterLast($model, '\\'));
     }
 }

@@ -20,8 +20,6 @@ class LaravelAuthorizerServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-authorizer')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-authorizer_table')
             ->hasCommands([
                 LaravelAuthorizerCommand::class,
                 GeneratePermissionsCommand::class,

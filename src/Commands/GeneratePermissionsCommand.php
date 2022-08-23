@@ -52,12 +52,14 @@ class GeneratePermissionsCommand extends Command
 
     /**
      * Generate all permissions.
+     *
+     * @return void
      */
     protected function generatePermissionsForAllModels(): void
     {
-        $models = $this->getModels();
-
-        $models->each(fn (string $model) => $this->generatePermissions($model));
+        $this->getModels()->each(
+            fn(string $model) => $this->generatePermissions($model)
+        );
     }
 
     /**
@@ -71,33 +73,43 @@ class GeneratePermissionsCommand extends Command
         $permissions = config('authorizer.permissions');
 
         collect($permissions)->each(
-            fn (string $permission) => $this->generatePermission(
+            fn(string $permission) => $this->generatePermission(
                 $model,
                 $permission
             )
         );
     }
 
-    public function generatePermission(string $model, string $permission)
+    /**
+     * Generate a permission for a given model.
+     *
+     * @param string $model
+     * @param string $permission
+     * @return mixed
+     */
+    public function generatePermission(string $model, string $permission): mixed
     {
         if (
             Str::contains($permission, 'any') ||
             Str::contains($permission, 'all')
         ) {
             return Permission::updateOrCreate([
-                'name' => $permission.' '.Str::plural(Str::lower($model)),
+                'name' =>
+                    $permission .
+                    ' ' .
+                    Str::snake(Str::plural(Str::lower($model))),
             ]);
         }
 
         return Permission::updateOrCreate([
-            'name' => $permission.' '.Str::lower($model),
+            'name' => $permission . ' ' . Str::snake(Str::lower($model)),
         ]);
     }
 
     /**
      * Get all models.
      *
-     * @return array
+     * @return array|Collection
      */
     public function getModels(): array|Collection
     {
@@ -119,8 +131,8 @@ class GeneratePermissionsCommand extends Command
                 }
 
                 return $reflection->isSubclassOf(Model::class) &&
-                    ! $reflection->isAbstract();
+                    !$reflection->isAbstract();
             })
-            ->map(fn ($model) => Str::afterLast($model, '\\'));
+            ->map(fn($model) => Str::afterLast($model, '\\'));
     }
 }

@@ -2,10 +2,10 @@
 
 namespace FlixtechsLabs\LaravelAuthorizer\Tests;
 
+use FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
-use FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizerServiceProvider;
 
 class TestCase extends Orchestra
 {

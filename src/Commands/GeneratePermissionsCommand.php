@@ -6,13 +6,11 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\Permission\Models\Permission;
 use SplFileInfo;
-use Symfony\Component\Filesystem\Filesystem;
 
 class GeneratePermissionsCommand extends Command
 {
@@ -53,12 +51,14 @@ class GeneratePermissionsCommand extends Command
 
     /**
      * Generate all permissions.
+     *
+     * @return void
      */
     protected function generatePermissionsForAllModels(): void
     {
-        $models = $this->getModels();
-
-        $models->each(fn(string $model) => $this->generatePermissions($model));
+        $this->getModels()->each(
+            fn(string $model) => $this->generatePermissions($model)
+        );
     }
 
     /**
@@ -79,26 +79,36 @@ class GeneratePermissionsCommand extends Command
         );
     }
 
-    public function generatePermission(string $model, string $permission)
+    /**
+     * Generate a permission for a given model.
+     *
+     * @param string $model
+     * @param string $permission
+     * @return mixed
+     */
+    public function generatePermission(string $model, string $permission): mixed
     {
         if (
             Str::contains($permission, 'any') ||
             Str::contains($permission, 'all')
         ) {
             return Permission::updateOrCreate([
-                'name' => $permission . ' ' . Str::plural(Str::lower($model)),
+                'name' =>
+                    $permission .
+                    ' ' .
+                    Str::snake(Str::plural(Str::lower($model))),
             ]);
         }
 
         return Permission::updateOrCreate([
-            'name' => $permission . ' ' . Str::lower($model),
+            'name' => $permission . ' ' . Str::snake(Str::lower($model)),
         ]);
     }
 
     /**
      * Get all models.
      *
-     * @return array
+     * @return array|Collection
      */
     public function getModels(): array|Collection
     {

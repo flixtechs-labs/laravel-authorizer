@@ -6,6 +6,7 @@ use FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\Permission\PermissionServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -16,6 +17,7 @@ class TestCase extends Orchestra
         $this->beforeApplicationDestroyed(function () {
             File::cleanDirectory(app_path('Models'));
             File::cleanDirectory(app_path('Policies'));
+            File::deleteDirectory(app_path('Policies'));
         });
 
         Factory::guessFactoryNamesUsing(
@@ -40,5 +42,28 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/../database/migrations/create_laravel-authorizer_table.php.stub';
         $migration->up();
         */
+    }
+
+    public function defineDatabaseMigrations()
+    {
+        $this->artisan('vendor:publish', [
+            '--provider' => PermissionServiceProvider::class,
+        ]);
+
+        $this->artisan('migrate:fresh')->run();
+
+        $this->beforeApplicationDestroyed(function () {
+            $this->artisan('migrate:rollback')->run();
+        });
+    }
+
+    /**
+     * Ignore package discovery from.
+     *
+     * @return array<int, array>
+     */
+    public function ignorePackageDiscoveriesFrom(): array
+    {
+        return [];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace FlixtechsLabs\LaravelAuthorizer;
 
+use FlixtechsLabs\LaravelAuthorizer\Commands\GeneratePermissionsCommand;
 use Illuminate\Foundation\Console\AboutCommand;
 use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -21,7 +22,10 @@ class LaravelAuthorizerServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_laravel-authorizer_table')
-            ->hasCommand(LaravelAuthorizerCommand::class);
+            ->hasCommands([
+                LaravelAuthorizerCommand::class,
+                GeneratePermissionsCommand::class,
+            ]);
     }
 
     public function boot()

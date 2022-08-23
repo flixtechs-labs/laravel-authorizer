@@ -62,3 +62,17 @@ it('can create policies for all models', function () {
     assertFileExists(base_path('app/Policies/OrderPolicy.php'));
     assertFileExists(base_path('app/Policies/OrderItemPolicy.php'));
 });
+
+it('can skip existing policies', function () {
+    $this->artisan(LaravelAuthorizerCommand::class, [
+        'name' => 'User',
+        '--model' => 'User',
+    ])->assertSuccessful();
+
+    assertFileExists(base_path('app/Policies/UserPolicy.php'));
+
+    $this->artisan(LaravelAuthorizerCommand::class, [
+        'name' => 'User',
+        '--model' => 'User',
+    ])->assertSuccessful();
+});

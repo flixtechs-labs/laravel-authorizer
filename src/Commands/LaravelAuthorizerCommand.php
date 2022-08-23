@@ -13,10 +13,24 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class LaravelAuthorizerCommand extends Command
 {
-    public $signature = 'authorizer:generate {name? : The name of the policy to generate} {--m|model= : The model to use for the policy}';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    public $signature = 'authorizer:generate {name? : The name of the policy to generate} {--m|model= : The model to use for the policy} {--f|force : Overwrite existing files}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     public $description = 'Generate authorizations for your application';
 
+    /**
+     * Run the command.
+     * @return int
+     */
     public function handle(): int
     {
         $this->comment('Generating policies...');
@@ -45,6 +59,11 @@ class LaravelAuthorizerCommand extends Command
         return self::SUCCESS;
     }
 
+    /**
+     * Generate policies for all models.
+     *
+     * @return void
+     */
     public function generateAllPolicies(): void
     {
         $models = collect(File::allFiles(app_path()))
@@ -70,16 +89,26 @@ class LaravelAuthorizerCommand extends Command
             ->map(fn($model) => Str::afterLast($model, '\\'));
 
         $models->each(function (string $model) {
-            if (file_exists($this->getPolicyPath($model))) {
-                return;
-            }
-
             $this->generatePolicy($model, $model);
         });
     }
 
+    /**
+     * Generate a plain policy without a model.
+     *
+     * @param string $name
+     * @return void
+     */
     public function generatePlainPolicy(string $name): void
     {
+        if (
+            file_exists($this->getPolicyPath($name)) &&
+            !$this->option('force')
+        ) {
+            $this->error(sprintf('Policy "%s" already exists!', $name));
+            return;
+        }
+
         $compiled = collect([
             'namespacedUserModel' => $this->getNamespacedUserModel(),
             'namespace' => $this->getNamespace(),
@@ -95,14 +124,20 @@ class LaravelAuthorizerCommand extends Command
         (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
     }
 
-    public function getPolicyPath(string $name): string
-    {
-        return app_path('Policies/' . $this->getClassName($name) . '.php');
-    }
-
+    /**
+     * Generate a policy for a given model.
+     *
+     * @param string $name
+     * @param string $model
+     * @return void
+     */
     private function generatePolicy(string $name, string $model): void
     {
-        if (file_exists($this->getPolicyPath($name))) {
+        if (
+            file_exists($this->getPolicyPath($name)) &&
+            !$this->option('force')
+        ) {
+            $this->error(sprintf('Policy "%s" already exists!', $name));
             return;
         }
 
@@ -135,11 +170,32 @@ class LaravelAuthorizerCommand extends Command
         (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
     }
 
+    /**
+     * Get the path to the policy.
+     *
+     * @return string
+     */
+    public function getPolicyPath(string $name): string
+    {
+        return app_path('Policies/' . $this->getClassName($name) . '.php');
+    }
+
+    /**
+     * Get the policies namespace.
+     *
+     * @return string
+     */
     public function getNamespace(): string
     {
         return app()->getNamespace() . 'Policies';
     }
 
+    /**
+     * Get the class name for the policy.
+     *
+     * @param string $name The name of the policy
+     * @return string
+     */
     public function getClassName(string $name): string
     {
         if (Str::endsWith(Str::lower($name), 'policy')) {
@@ -149,16 +205,32 @@ class LaravelAuthorizerCommand extends Command
         return Str::studly($name) . 'Policy';
     }
 
+    /**
+     * Get the namespace for the model.
+     *
+     * @param string $model The name of the model
+     * @return string
+     */
     public function getNamespacedModel(string $model): string
     {
         return app()->getNamespace() . 'Models\\' . Str::studly($model);
     }
 
+    /**
+     * Get the namespace for the User model.
+     *
+     * @return string
+     */
     public function getNamespacedUserModel(): string
     {
         return config('auth.providers.users.model');
     }
 
+    /**
+     * Get the path to the stub.
+     *
+     * @return string
+     */
     public function getStub(): string
     {
         return __DIR__ . '/stubs/policy.stub';

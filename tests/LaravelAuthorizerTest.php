@@ -1,8 +1,8 @@
 <?php
 
 use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
-use Illuminate\Support\Facades\Artisan;
 use function PHPUnit\Framework\assertFileExists;
+use function PHPUnit\Framework\assertStringContainsString;
 
 it('can run the command successfully', function () {
     $this->artisan(LaravelAuthorizerCommand::class, [
@@ -75,4 +75,29 @@ it('can skip existing policies', function () {
         'name' => 'User',
         '--model' => 'User',
     ])->assertSuccessful();
+});
+
+it('can force create policy even if it exists', function () {
+    $this->artisan(LaravelAuthorizerCommand::class, [
+        'name' => 'User',
+        '--model' => 'User',
+    ])->assertSuccessful();
+
+    assertStringContainsString(
+        'create user',
+        file_get_contents(base_path('app/Policies/UserPolicy.php'))
+    );
+
+    $this->artisan(LaravelAuthorizerCommand::class, [
+        'name' => 'User',
+        '--model' => 'Post',
+        '--force' => true,
+    ])->assertSuccessful();
+
+    assertFileExists(app_path('Policies/UserPolicy.php'));
+
+    assertStringContainsString(
+        'create post',
+        file_get_contents(app_path('Policies/UserPolicy.php'))
+    );
 });

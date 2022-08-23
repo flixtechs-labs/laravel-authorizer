@@ -42,7 +42,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "FlixtechsLabs\\LaravelAuthorizer\\Tests\\": "tests"
+            "FlixtechsLabs\\LaravelAuthorizer\\Tests\\": "tests",
+            "App\\": "vendor/orchestra/testbench-core/laravel/app"
         }
     },
     "scripts": {

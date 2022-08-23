@@ -3,6 +3,7 @@
 namespace FlixtechsLabs\LaravelAuthorizer\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
 use FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizerServiceProvider;
 
@@ -12,16 +13,23 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        $this->beforeApplicationDestroyed(function () {
+            File::cleanDirectory(app_path('Models'));
+            File::cleanDirectory(app_path('Policies'));
+        });
+
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(
+                string $modelName
+            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\' .
+                class_basename($modelName) .
+                'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
-        return [
-            LaravelAuthorizerServiceProvider::class,
-        ];
+        return [LaravelAuthorizerServiceProvider::class];
     }
 
     public function getEnvironmentSetUp($app)

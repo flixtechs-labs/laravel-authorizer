@@ -3,8 +3,8 @@
 namespace FlixtechsLabs\LaravelAuthorizer;
 
 use FlixtechsLabs\LaravelAuthorizer\Commands\GeneratePermissionsCommand;
-use Illuminate\Foundation\Console\AboutCommand;
 use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
+use Illuminate\Foundation\Console\AboutCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -34,7 +34,7 @@ class LaravelAuthorizerServiceProvider extends PackageServiceProvider
 
         AboutCommand::add(
             'Laravel Authorizer',
-            fn() => [
+            fn () => [
                 'version' => '0.0.1',
                 'author' => 'Flixtechs Labs',
                 'license' => 'MIT',

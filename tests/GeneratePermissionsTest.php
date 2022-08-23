@@ -17,7 +17,7 @@ it('can generate permissions', function () {
         'Order',
         'OrderItem',
     ])->each(
-        fn($model) => $this->artisan('make:model', [
+        fn ($model) => $this->artisan('make:model', [
             'name' => $model,
         ])
     );
@@ -63,7 +63,7 @@ it('can generate permission for just one model', function () {
         'Order',
         'OrderItem',
     ])->each(
-        fn($model) => $this->artisan('make:model', [
+        fn ($model) => $this->artisan('make:model', [
             'name' => $model,
         ])
     );

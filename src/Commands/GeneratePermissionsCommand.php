@@ -6,13 +6,11 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\Permission\Models\Permission;
 use SplFileInfo;
-use Symfony\Component\Filesystem\Filesystem;
 
 class GeneratePermissionsCommand extends Command
 {
@@ -32,6 +30,7 @@ class GeneratePermissionsCommand extends Command
 
     /**
      * Run the command.
+     *
      * @return int
      */
     public function handle(): int
@@ -58,13 +57,13 @@ class GeneratePermissionsCommand extends Command
     {
         $models = $this->getModels();
 
-        $models->each(fn(string $model) => $this->generatePermissions($model));
+        $models->each(fn (string $model) => $this->generatePermissions($model));
     }
 
     /**
      * Generate permission for a given model.
      *
-     * @param string $model
+     * @param  string  $model
      * @return void
      */
     public function generatePermissions(string $model): void
@@ -72,7 +71,7 @@ class GeneratePermissionsCommand extends Command
         $permissions = config('authorizer.permissions');
 
         collect($permissions)->each(
-            fn(string $permission) => $this->generatePermission(
+            fn (string $permission) => $this->generatePermission(
                 $model,
                 $permission
             )
@@ -86,12 +85,12 @@ class GeneratePermissionsCommand extends Command
             Str::contains($permission, 'all')
         ) {
             return Permission::updateOrCreate([
-                'name' => $permission . ' ' . Str::plural(Str::lower($model)),
+                'name' => $permission.' '.Str::plural(Str::lower($model)),
             ]);
         }
 
         return Permission::updateOrCreate([
-            'name' => $permission . ' ' . Str::lower($model),
+            'name' => $permission.' '.Str::lower($model),
         ]);
     }
 
@@ -120,8 +119,8 @@ class GeneratePermissionsCommand extends Command
                 }
 
                 return $reflection->isSubclassOf(Model::class) &&
-                    !$reflection->isAbstract();
+                    ! $reflection->isAbstract();
             })
-            ->map(fn($model) => Str::afterLast($model, '\\'));
+            ->map(fn ($model) => Str::afterLast($model, '\\'));
     }
 }

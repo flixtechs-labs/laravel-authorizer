@@ -25,10 +25,10 @@ class TestCase extends Orchestra
         });
 
         Factory::guessFactoryNamesUsing(
-            fn(
+            fn (
                 string $modelName
-            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\' .
-                class_basename($modelName) .
+            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\'.
+                class_basename($modelName).
                 'Factory'
         );
     }

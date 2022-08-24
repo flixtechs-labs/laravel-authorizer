@@ -68,7 +68,7 @@ This will publish the migrations from the spatie/laravel-permission package, mig
 
 ## Usage
 
-This package generates a batteries included policy skeletons. You just have to generate a policy and authorize in your controllers.
+This package generates a batteries included policy skeleton. You just have to generate a policy and authorize in your controllers.
 
 ### Generate a policy for one model
 

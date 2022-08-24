@@ -4,12 +4,14 @@ namespace FlixtechsLabs\LaravelAuthorizer\Tests;
 
 use FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Permission\PermissionServiceProvider;
 
 class TestCase extends Orchestra
 {
+    use RefreshDatabase;
     protected function setUp(): void
     {
         parent::setUp();
@@ -18,6 +20,8 @@ class TestCase extends Orchestra
             File::cleanDirectory(app_path('Models'));
             File::cleanDirectory(app_path('Policies'));
             File::deleteDirectory(app_path('Policies'));
+            File::cleanDirectory(database_path('migrations'));
+            File::delete(config_path('permission.php'));
         });
 
         Factory::guessFactoryNamesUsing(
@@ -55,9 +59,11 @@ class TestCase extends Orchestra
             '--provider' => PermissionServiceProvider::class,
         ])->run();
 
-        $this->loadLaravelMigrations();
+        //        $this->loadLaravelMigrations();
 
-        $this->artisan('migrate:fresh')->run();
+        //$this->loadMigrationsFrom(database_path('migrations'));
+
+        //        $this->artisan('migrate:fresh')->run();
 
         $this->beforeApplicationDestroyed(function () {
             $this->artisan('migrate:rollback')->run();

@@ -21,10 +21,10 @@ class TestCase extends Orchestra
         });
 
         Factory::guessFactoryNamesUsing(
-            fn (
+            fn(
                 string $modelName
-            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\'.
-                class_basename($modelName).
+            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\' .
+                class_basename($modelName) .
                 'Factory'
         );
     }
@@ -48,7 +48,9 @@ class TestCase extends Orchestra
     {
         $this->artisan('vendor:publish', [
             '--provider' => PermissionServiceProvider::class,
-        ]);
+        ])->run();
+
+        $this->loadLaravelMigrations();
 
         $this->artisan('migrate:fresh')->run();
 

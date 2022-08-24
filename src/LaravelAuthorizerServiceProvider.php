@@ -34,7 +34,7 @@ class LaravelAuthorizerServiceProvider extends PackageServiceProvider
 
         AboutCommand::add(
             'Laravel Authorizer',
-            fn() => [
+            fn () => [
                 'version' => '0.0.1',
                 'author' => 'Flixtechs Labs',
                 'license' => 'MIT',

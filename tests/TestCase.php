@@ -21,10 +21,10 @@ class TestCase extends Orchestra
         });
 
         Factory::guessFactoryNamesUsing(
-            fn (
+            fn(
                 string $modelName
-            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\'.
-                class_basename($modelName).
+            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\' .
+                class_basename($modelName) .
                 'Factory'
         );
     }
@@ -37,6 +37,11 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('database.connections.testing', [
+            'driver' => 'sqlite',
+            'database' => 'database/database.sqlite',
+            'prefix' => '',
+        ]);
 
         /*
         $migration = include __DIR__.'/../database/migrations/create_laravel-authorizer_table.php.stub';

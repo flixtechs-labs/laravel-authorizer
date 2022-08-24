@@ -7,9 +7,7 @@ return [
         'delete',
         'view all',
         'view',
-        'view own',
         'force delete',
         'restore',
-        'restore own',
     ],
 ];

@@ -3,86 +3,99 @@
 namespace FlixtechsLabs\LaravelAuthorizer\Tests;
 
 use FlixtechsLabs\LaravelAuthorizer\Commands\GeneratePermissionsCommand;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
 
-it('can generate permissions', function () {
-    collect([
-        'User',
-        'Post',
-        'Comment',
-        'Tag',
-        'Product',
-        'Category',
-        'Order',
-        'OrderItem',
-    ])->each(
-        fn ($model) => $this->artisan('make:model', [
-            'name' => $model,
+class GeneratePermissionsTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function testCanAlsoRunTests(): void
+    {
+        $this->assertTrue(true);
+    }
+
+    public function testCanGeneratePermissionsForAllModels(): void
+    {
+        collect([
+            'User',
+            'Post',
+            'Comment',
+            'Tag',
+            'Product',
+            'Category',
+            'Order',
+            'OrderItem',
+        ])->each(
+            fn($model) => $this->artisan('make:model', [
+                'name' => $model,
+            ])
+        );
+
+        $this->artisan(GeneratePermissionsCommand::class)
+            ->expectsOutput('Generating permissions...')
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'create post',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'update post',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'delete post',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'create comment',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'update comment',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'delete comment',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'create tag',
+        ]);
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'update tag',
+        ]);
+    }
+
+    public function testCanGeneratePermissionForJustTheSpecifiedModel(): void
+    {
+        collect([
+            'User',
+            'Post',
+            'Comment',
+            'Tag',
+            'Product',
+            'Category',
+            'Order',
+            'OrderItem',
+        ])->each(
+            fn($model) => $this->artisan('make:model', [
+                'name' => $model,
+            ])
+        );
+
+        $this->artisan(GeneratePermissionsCommand::class, [
+            '--model' => 'Post',
         ])
-    );
+            ->expectsOutput('Generating permissions...')
+            ->assertSuccessful();
 
-    $this->artisan(GeneratePermissionsCommand::class)
-        ->expectsOutput('Generating permissions...')
-        ->assertSuccessful();
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'create post',
+        ]);
 
-    assertDatabaseHas('permissions', [
-        'name' => 'create post',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'update post',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'delete post',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'create comment',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'update comment',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'delete comment',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'create tag',
-    ]);
-    assertDatabaseHas('permissions', [
-        'name' => 'update tag',
-    ]);
-});
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'update post',
+        ]);
 
-it('can generate permission for just one model', function () {
-    collect([
-        'User',
-        'Post',
-        'Comment',
-        'Tag',
-        'Product',
-        'Category',
-        'Order',
-        'OrderItem',
-    ])->each(
-        fn ($model) => $this->artisan('make:model', [
-            'name' => $model,
-        ])
-    );
-
-    $this->artisan(GeneratePermissionsCommand::class, [
-        '--model' => 'Post',
-    ])
-        ->expectsOutput('Generating permissions...')
-        ->assertSuccessful();
-
-    assertDatabaseHas('permissions', [
-        'name' => 'create post',
-    ]);
-
-    assertDatabaseHas('permissions', [
-        'name' => 'update post',
-    ]);
-
-    assertDatabaseMissing('permissions', [
-        'name' => 'delete tag',
-    ]);
-});
+        $this->assertDatabaseMissing('permissions', [
+            'name' => 'delete tag',
+        ]);
+    }
+}

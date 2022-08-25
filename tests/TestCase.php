@@ -4,14 +4,12 @@ namespace FlixtechsLabs\LaravelAuthorizer\Tests;
 
 use FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
-use Orchestra\Testbench\TestCase as Orchestra;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Permission\PermissionServiceProvider;
 
-class TestCase extends Orchestra
+class TestCase extends BaseTestCase
 {
-    use RefreshDatabase;
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,55 +23,35 @@ class TestCase extends Orchestra
         });
 
         Factory::guessFactoryNamesUsing(
-            fn (
+            fn(
                 string $modelName
-            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\'.
-                class_basename($modelName).
+            ) => 'FlixtechsLabs\\LaravelAuthorizer\\Database\\Factories\\' .
+                class_basename($modelName) .
                 'Factory'
         );
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [LaravelAuthorizerServiceProvider::class];
     }
 
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-        config()->set('database.connections.testing', [
-            'driver' => 'sqlite',
-            'database' => 'database/database.sqlite',
-            'prefix' => '',
-        ]);
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-authorizer_table.php.stub';
-        $migration->up();
-        */
-    }
-
-    public function defineDatabaseMigrations()
+    public function defineDatabaseMigrations(): void
     {
         $this->artisan('vendor:publish', [
             '--provider' => PermissionServiceProvider::class,
         ])->run();
+    }
 
-        //        $this->loadLaravelMigrations();
-
-        //$this->loadMigrationsFrom(database_path('migrations'));
-
-        //        $this->artisan('migrate:fresh')->run();
-
-        $this->beforeApplicationDestroyed(function () {
-            $this->artisan('migrate:rollback')->run();
-        });
+    public function getEnvironmentSetUp($app): void
+    {
+        config()->set('database.default', 'testing');
     }
 
     /**
      * Ignore package discovery from.
      *
-     * @return array<int, array>
+     * @return array<int, string>
      */
     public function ignorePackageDiscoveriesFrom(): array
     {

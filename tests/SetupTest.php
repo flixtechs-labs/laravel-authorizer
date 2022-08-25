@@ -1,31 +1,44 @@
 <?php
 
+namespace FlixtechsLabs\LaravelAuthorizer\Tests;
+
 use FlixtechsLabs\LaravelAuthorizer\Commands\SetupCommand;
 
-it('can setup the authorizer package', function () {
-    $this->artisan(SetupCommand::class)
-        ->expectsOutput('Setup complete!')
-        ->assertSuccessful();
-});
+class SetupTest extends TestCase
+{
+    public function testCanRunTest(): void
+    {
+        $this->assertTrue(true);
+    }
 
-it('can generate permissions on setup', function () {
-    $this->artisan('make:model', ['name' => 'User'])->assertSuccessful();
+    public function testCanSetupTheAuthorizerPackage(): void
+    {
+        $this->artisan(SetupCommand::class)
+            ->expectsOutput('Setup complete!')
+            ->assertSuccessful();
+    }
 
-    $this->artisan(SetupCommand::class, [
-        '--permissions' => true,
-    ])->assertSuccessful();
+    public function testCanGeneratePermissionsDuringSetup(): void
+    {
+        $this->artisan('make:model', ['name' => 'User'])->assertSuccessful();
 
-    $this->assertDatabaseHas('permissions', [
-        'name' => 'create user',
-    ]);
-});
+        $this->artisan(SetupCommand::class, [
+            '--permissions' => true,
+        ])->assertSuccessful();
 
-it('can generate policies on setup', function () {
-    $this->artisan('make:model', ['name' => 'User'])->assertSuccessful();
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'create user',
+        ]);
+    }
 
-    $this->artisan(SetupCommand::class, [
-        '--policies' => true,
-    ])->assertSuccessful();
+    public function testCanGeneratePoliciesDuringSetup(): void
+    {
+        $this->artisan('make:model', ['name' => 'User'])->assertSuccessful();
 
-    $this->assertFileExists(app_path('Policies/UserPolicy.php'));
-});
+        $this->artisan(SetupCommand::class, [
+            '--policies' => true,
+        ])->assertSuccessful();
+
+        $this->assertFileExists(app_path('Policies/UserPolicy.php'));
+    }
+}

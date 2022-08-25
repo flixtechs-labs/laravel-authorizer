@@ -1,103 +1,114 @@
 <?php
 
+namespace FlixtechsLabs\LaravelAuthorizer\Tests;
+
 use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringContainsString;
 
-it('can run the command successfully', function () {
-    $this->artisan(LaravelAuthorizerCommand::class, [
-        'name' => 'User',
-        '--model' => 'User',
-    ])->assertSuccessful();
-});
+class LaravelAuthorizerTest extends TestCase
+{
+    public function testCanRunTests(): void
+    {
+        $this->assertTrue(true);
+    }
 
-it('can create policy when called with specific policy name', function () {
-    $this->artisan(LaravelAuthorizerCommand::class, [
-        'name' => 'Post',
-        '--model' => 'Post',
-    ])->assertSuccessful();
+    public function testCanRunCommandSuccessfully(): void
+    {
+        $this->artisan(LaravelAuthorizerCommand::class, [
+            'name' => 'User',
+            '--model' => 'User',
+        ])->assertSuccessful();
+    }
 
-    assertFileExists(base_path('app/Policies/PostPolicy.php'));
-});
+    public function testCanCreatePolicyWhenCalledWithSpecificPolicyName(): void
+    {
+        $this->artisan(LaravelAuthorizerCommand::class, [
+            'name' => 'Post',
+            '--model' => 'Post',
+        ])->assertSuccessful();
 
-it(
-    'can create and append "Policy" to end of file name even if it\'s already passed',
-    function () {
+        $this->assertFileExists(base_path('app/Policies/PostPolicy.php'));
+    }
+
+    public function testCanAppendPolicyToFilenameEventIfItWasIncludedInPolicyName(): void
+    {
         $this->artisan(LaravelAuthorizerCommand::class, [
             'name' => 'UserPolicy',
             '--model' => 'User',
         ])->assertSuccessful();
 
-        assertFileExists(base_path('app/Policies/UserPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/UserPolicy.php'));
     }
-);
 
-it('can create policies for all models', function () {
-    collect([
-        'User',
-        'Post',
-        'Comment',
-        'Tag',
-        'Product',
-        'Category',
-        'Order',
-        'OrderItem',
-    ])->each(
-        fn ($model) => $this->artisan('make:model', [
-            'name' => $model,
-        ])
-    );
+    public function testCanGeneratePoliciesForAllModels(): void
+    {
+        collect([
+            'User',
+            'Post',
+            'Comment',
+            'Tag',
+            'Product',
+            'Category',
+            'Order',
+            'OrderItem',
+        ])->each(
+            fn($model) => $this->artisan('make:model', [
+                'name' => $model,
+            ])
+        );
 
-    assertFileExists(app_path('Models/User.php'));
-    assertFileExists(app_path('Models/Post.php'));
-    //
-    $this->artisan(LaravelAuthorizerCommand::class)->assertSuccessful();
+        $this->assertFileExists(app_path('Models/User.php'));
+        $this->assertFileExists(app_path('Models/Post.php'));
 
-    assertFileExists(base_path('app/Policies/UserPolicy.php'));
-    assertFileExists(base_path('app/Policies/PostPolicy.php'));
-    assertFileExists(base_path('app/Policies/CommentPolicy.php'));
-    assertFileExists(base_path('app/Policies/TagPolicy.php'));
-    assertFileExists(base_path('app/Policies/ProductPolicy.php'));
-    assertFileExists(base_path('app/Policies/CategoryPolicy.php'));
-    assertFileExists(base_path('app/Policies/OrderPolicy.php'));
-    assertFileExists(base_path('app/Policies/OrderItemPolicy.php'));
-});
+        $this->artisan(LaravelAuthorizerCommand::class)->assertSuccessful();
 
-it('can skip existing policies', function () {
-    $this->artisan(LaravelAuthorizerCommand::class, [
-        'name' => 'User',
-        '--model' => 'User',
-    ])->assertSuccessful();
+        $this->assertFileExists(base_path('app/Policies/UserPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/PostPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/CommentPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/TagPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/ProductPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/CategoryPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/OrderPolicy.php'));
+        $this->assertFileExists(base_path('app/Policies/OrderItemPolicy.php'));
+    }
 
-    assertFileExists(base_path('app/Policies/UserPolicy.php'));
+    public function testCanSkipExistingPolicies(): void
+    {
+        $this->artisan(LaravelAuthorizerCommand::class, [
+            'name' => 'User',
+            '--model' => 'User',
+        ])->assertSuccessful();
 
-    $this->artisan(LaravelAuthorizerCommand::class, [
-        'name' => 'User',
-        '--model' => 'User',
-    ])->assertSuccessful();
-});
+        $this->assertFileExists(base_path('app/Policies/UserPolicy.php'));
 
-it('can force create policy even if it exists', function () {
-    $this->artisan(LaravelAuthorizerCommand::class, [
-        'name' => 'User',
-        '--model' => 'User',
-    ])->assertSuccessful();
+        $this->artisan(LaravelAuthorizerCommand::class, [
+            'name' => 'User',
+            '--model' => 'User',
+        ])->assertSuccessful();
+    }
 
-    assertStringContainsString(
-        'create user',
-        file_get_contents(base_path('app/Policies/UserPolicy.php'))
-    );
+    public function testCanForceCreatePolicyEvenIfItExists(): void
+    {
+        $this->artisan(LaravelAuthorizerCommand::class, [
+            'name' => 'User',
+            '--model' => 'User',
+        ])->assertSuccessful();
 
-    $this->artisan(LaravelAuthorizerCommand::class, [
-        'name' => 'User',
-        '--model' => 'Post',
-        '--force' => true,
-    ])->assertSuccessful();
+        $this->assertStringContainsString(
+            'create user',
+            file_get_contents(base_path('app/Policies/UserPolicy.php'))
+        );
 
-    assertFileExists(app_path('Policies/UserPolicy.php'));
+        $this->artisan(LaravelAuthorizerCommand::class, [
+            'name' => 'User',
+            '--model' => 'Post',
+            '--force' => true,
+        ])->assertSuccessful();
 
-    assertStringContainsString(
-        'create post',
-        file_get_contents(app_path('Policies/UserPolicy.php'))
-    );
-});
+        $this->assertFileExists(app_path('Policies/UserPolicy.php'));
+
+        $this->assertStringContainsString(
+            'create post',
+            file_get_contents(app_path('Policies/UserPolicy.php'))
+        );
+    }
+}

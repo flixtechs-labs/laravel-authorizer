@@ -32,13 +32,15 @@ class LaravelAuthorizerServiceProvider extends PackageServiceProvider
     {
         parent::boot();
 
-        AboutCommand::add(
-            'Laravel Authorizer',
-            fn () => [
-                'version' => '0.0.1',
-                'author' => 'Flixtechs Labs',
-                'license' => 'MIT',
-            ]
-        );
+        if (version_compare($this->app->version(), '9.21.0') >= 0) {
+            AboutCommand::add(
+                'Laravel Authorizer',
+                fn() => [
+                    'version' => '0.0.1',
+                    'author' => 'Flixtechs Labs',
+                    'license' => 'MIT',
+                ]
+            );
+        }
     }
 }

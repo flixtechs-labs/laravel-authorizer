@@ -45,4 +45,4 @@ jobs:
           touch database/database.sqlite
 
       - name: Execute tests
-        run: vendor/bin/pest
+        run: vendor/bin/phpunit --process-isolation --testdox

@@ -51,7 +51,7 @@ class LaravelAuthorizerTest extends TestCase
             'Order',
             'OrderItem',
         ])->each(
-            fn($model) => $this->artisan('make:model', [
+            fn ($model) => $this->artisan('make:model', [
                 'name' => $model,
             ])
         );

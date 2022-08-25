@@ -4,8 +4,6 @@ namespace FlixtechsLabs\LaravelAuthorizer\Tests;
 
 use FlixtechsLabs\LaravelAuthorizer\Commands\GeneratePermissionsCommand;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function Pest\Laravel\assertDatabaseHas;
-use function Pest\Laravel\assertDatabaseMissing;
 
 class GeneratePermissionsTest extends TestCase
 {
@@ -28,7 +26,7 @@ class GeneratePermissionsTest extends TestCase
             'Order',
             'OrderItem',
         ])->each(
-            fn($model) => $this->artisan('make:model', [
+            fn ($model) => $this->artisan('make:model', [
                 'name' => $model,
             ])
         );
@@ -75,7 +73,7 @@ class GeneratePermissionsTest extends TestCase
             'Order',
             'OrderItem',
         ])->each(
-            fn($model) => $this->artisan('make:model', [
+            fn ($model) => $this->artisan('make:model', [
                 'name' => $model,
             ])
         );

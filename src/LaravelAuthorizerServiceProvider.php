@@ -35,7 +35,7 @@ class LaravelAuthorizerServiceProvider extends PackageServiceProvider
         if (version_compare($this->app->version(), '9.21.0') >= 0) {
             AboutCommand::add(
                 'Laravel Authorizer',
-                fn() => [
+                fn () => [
                     'version' => '0.0.1',
                     'author' => 'Flixtechs Labs',
                     'license' => 'MIT',

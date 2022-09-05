@@ -136,7 +136,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): Response|bool
     {
-        return ($user->can('update post');
+        return $user->can('update post');
     }
 
     /**
@@ -148,7 +148,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): Response|bool
     {
-        return ($user->can('delete post');
+        return $user->can('delete post');
     }
 
     /**

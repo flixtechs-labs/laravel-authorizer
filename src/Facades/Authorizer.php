@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \FlixtechsLabs\LaravelAuthorizer\LaravelAuthorizer
  */
-class LaravelAuthorizer extends Facade
+class Authorizer extends Facade
 {
     protected static function getFacadeAccessor()
     {

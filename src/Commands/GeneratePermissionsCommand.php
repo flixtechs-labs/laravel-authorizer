@@ -3,8 +3,8 @@
 namespace FlixtechsLabs\LaravelAuthorizer\Commands;
 
 use FlixtechsLabs\LaravelAuthorizer\Commands\Traits\LocatesModels;
+use FlixtechsLabs\LaravelAuthorizer\Facades\Authorizer;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 
 class GeneratePermissionsCommand extends Command
@@ -67,33 +67,12 @@ class GeneratePermissionsCommand extends Command
      */
     public function generatePermissions(string $model): void
     {
-        $permissions = config('authorizer.permissions');
+        $permissions = Authorizer::getPermissionsFor($model);
 
         collect($permissions)->each(
-            fn (string $permission) => $this->generatePermission(
-                $model,
+            fn (string $permission) => Permission::findOrCreate(
                 $permission
             )
-        );
-    }
-
-    /**
-     * Generate a permission for a given model.
-     *
-     * @param  string  $model
-     * @param  string  $permission
-     * @return mixed
-     */
-    public function generatePermission(string $model, string $permission): mixed
-    {
-        if (Str::contains($permission, 'all')) {
-            return Permission::findOrCreate(
-                $permission.' '.Str::snake(Str::plural(Str::lower($model)))
-            );
-        }
-
-        return Permission::findOrCreate(
-            $permission.' '.Str::snake(Str::lower($model))
         );
     }
 }

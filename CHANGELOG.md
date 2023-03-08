@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.0.4 - 2023-03-08
+
+### What's Changed
+
+- build(deps): bump dependabot/fetch-metadata from 1.3.5 to 1.3.6 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/8
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.0.3...0.0.4
+
 ## 0.0.3 - 2023-01-09
 
 ### What's Changed

@@ -66,7 +66,7 @@ class LaravelAuthorizerCommand extends Command
     public function generateAllPolicies(): void
     {
         $this->getModels()->each(
-            fn (string $model) => $this->generatePolicy($model, $model)
+            fn(string $model) => $this->generatePolicy($model, $model)
         );
     }
 
@@ -80,7 +80,7 @@ class LaravelAuthorizerCommand extends Command
     {
         if (
             file_exists($this->getPolicyPath($name)) &&
-            ! $this->option('force')
+            !$this->option('force')
         ) {
             $this->error(sprintf('Policy "%s" already exists!', $name));
 
@@ -92,8 +92,8 @@ class LaravelAuthorizerCommand extends Command
             'namespace' => $this->getNamespace(),
             'class' => $this->getClassName($name),
         ])->reduce(
-            fn ($carry, $value, $key) => Str::replace(
-                '{{ '.$key.' }}',
+            fn($carry, $value, $key) => Str::replace(
+                '{{ ' . $key . ' }}',
                 $value,
                 $carry
             )
@@ -113,7 +113,7 @@ class LaravelAuthorizerCommand extends Command
     {
         if (
             file_exists($this->getPolicyPath($name)) &&
-            ! $this->option('force')
+            !$this->option('force')
         ) {
             $this->error(sprintf('Policy "%s" already exists!', $name));
 
@@ -123,7 +123,8 @@ class LaravelAuthorizerCommand extends Command
         $compiled = collect([
             'name' => $name,
             'model' => $model,
-            'modelVariable' => strtolower($model) ===
+            'modelVariable' =>
+                strtolower($model) ===
                 strtolower(
                     Str::afterLast($this->getNamespacedUserModel(), '\\')
                 )
@@ -137,12 +138,19 @@ class LaravelAuthorizerCommand extends Command
             'namespacedUserModel' => $this->getNamespacedUserModel(),
             'user' => Str::afterLast($this->getNamespacedUserModel(), '\\'),
         ])->reduce(
-            static fn ($old, $value, $key) => Str::replace(
-                '{{ '.$key.' }}',
+            static fn($old, $value, $key) => Str::replace(
+                '{{ ' . $key . ' }}',
                 $value,
                 $old
             ),
-            file_get_contents($this->getStub())
+            file_get_contents(
+                strtolower($model) ===
+                strtolower(
+                    Str::afterLast($this->getNamespacedUserModel(), '\\')
+                )
+                    ? $this->getStub()
+                    : $this->getUserPolicyPolicyStub()
+            )
         );
 
         (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
@@ -156,7 +164,7 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getPolicyPath(string $name): string
     {
-        return app_path('Policies/'.$this->getClassName($name).'.php');
+        return app_path('Policies/' . $this->getClassName($name) . '.php');
     }
 
     /**
@@ -166,7 +174,7 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getNamespace(): string
     {
-        return app()->getNamespace().'Policies';
+        return app()->getNamespace() . 'Policies';
     }
 
     /**
@@ -181,7 +189,7 @@ class LaravelAuthorizerCommand extends Command
             return Str::studly($name);
         }
 
-        return Str::studly($name).'Policy';
+        return Str::studly($name) . 'Policy';
     }
 
     /**
@@ -192,7 +200,7 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getNamespacedModel(string $model): string
     {
-        return app()->getNamespace().'Models\\'.Str::studly($model);
+        return app()->getNamespace() . 'Models\\' . Str::studly($model);
     }
 
     /**
@@ -212,6 +220,16 @@ class LaravelAuthorizerCommand extends Command
      */
     public function getStub(): string
     {
-        return __DIR__.'/stubs/policy.stub';
+        return __DIR__ . '/stubs/policy.stub';
+    }
+
+    /**
+     * Get the path to the user policy stub
+     *
+     * @return string
+     */
+    public function getUserPolicyPolicyStub(): string
+    {
+        return __DIR__ . '/stubs/policy.user.stub';
     }
 }

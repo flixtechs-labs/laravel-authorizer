@@ -14,8 +14,6 @@ trait LocatesModels
 {
     /**
      * Get all models.
-     *
-     * @return Collection
      */
     protected function getModels(): Collection
     {

@@ -27,8 +27,6 @@ class GeneratePermissionsCommand extends Command
 
     /**
      * Run the command.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -49,8 +47,6 @@ class GeneratePermissionsCommand extends Command
 
     /**
      * Generate all permissions.
-     *
-     * @return void
      */
     protected function generatePermissionsForAllModels(): void
     {
@@ -61,9 +57,6 @@ class GeneratePermissionsCommand extends Command
 
     /**
      * Generate permission for a given model.
-     *
-     * @param  string  $model
-     * @return void
      */
     public function generatePermissions(string $model): void
     {

@@ -136,8 +136,8 @@ class LaravelAuthorizerCommand extends Command
                 strtolower(
                     Str::afterLast($this->getNamespacedUserModel(), '\\')
                 )
-                    ? $this->getStub()
-                    : $this->getUserPolicyPolicyStub()
+                ? $this->getUserPolicyPolicyStub()
+                : $this->getStub()
             )
         );
 

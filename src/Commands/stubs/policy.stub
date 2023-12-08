@@ -13,8 +13,8 @@ class {{ class }}
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @return bool
      */
     public function viewAny({{ user }} $user): bool
     {
@@ -24,9 +24,9 @@ class {{ class }}
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ user }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return bool
      */
     public function view({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
@@ -36,8 +36,8 @@ class {{ class }}
     /**
      * Determine whether the user can create models.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ user }}  $user
+     * @return bool
      */
     public function create({{ user }} $user): bool
     {
@@ -47,9 +47,9 @@ class {{ class }}
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ user }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return bool
      */
     public function update({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
@@ -59,9 +59,9 @@ class {{ class }}
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ user }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return bool
      */
     public function delete({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
@@ -71,9 +71,9 @@ class {{ class }}
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ user }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return bool
      */
     public function restore({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
@@ -83,9 +83,9 @@ class {{ class }}
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ user }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return bool
      */
     public function forceDelete({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {

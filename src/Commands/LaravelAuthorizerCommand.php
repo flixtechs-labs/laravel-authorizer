@@ -51,7 +51,7 @@ class LaravelAuthorizerCommand extends Command
             return self::SUCCESS;
         }
 
-        $this->generatePolicy($name, $model);
+        $this->generatePolicy($name, ucfirst($model));
 
         return self::SUCCESS;
     }
@@ -136,8 +136,8 @@ class LaravelAuthorizerCommand extends Command
                 strtolower(
                     Str::afterLast($this->getNamespacedUserModel(), '\\')
                 )
-                    ? $this->getStub()
-                    : $this->getUserPolicyPolicyStub()
+                ? $this->getUserPolicyPolicyStub()
+                : $this->getStub()
             )
         );
 

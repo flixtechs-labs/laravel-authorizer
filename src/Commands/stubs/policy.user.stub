@@ -3,6 +3,7 @@
 namespace {{ namespace }};
 
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 use {{ namespacedUserModel }};
 
 class {{ class }}
@@ -12,8 +13,8 @@ class {{ class }}
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @return Response|bool
      */
     public function viewAny({{ user }} $user): bool
     {
@@ -23,20 +24,20 @@ class {{ class }}
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedUserModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @param  {{ model }}  $model
+     * @return Response|bool
      */
-    public function view({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
+    public function view({{ user }} $user, {{ userModel }} $model): bool
     {
-        return $user->can('view {{ modelSingularLowerCase }}', ${{ modelVariable }});
+        return $user->can('view {{ modelSingularLowerCase }}', $model)
     }
 
     /**
      * Determine whether the user can create models.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @return Response|bool
      */
     public function create({{ user }} $user): bool
     {
@@ -46,33 +47,33 @@ class {{ class }}
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedUserModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @param  {{ model }}  $model
+     * @return Response|bool
      */
-    public function update({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
+    public function update({{ user }} $user, {{ model }} $model): bool
     {
-        return $user->can('update {{ modelSingularLowerCase }}', ${{ modelVariable }});
+        return $user->can('update {{ modelSingularLowerCase }}', $model);
     }
 
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedUserModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return Response|bool
      */
-    public function delete({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
+    public function delete({{ user }} $user, {{ model }} $model): bool
     {
-        return $user->can('delete {{ modelSingularLowerCase }}', ${{ modelVariable }});
+        return $user->can('delete {{ modelSingularLowerCase }}', $model);
     }
 
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedUserModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return Response|bool
      */
     public function restore({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
@@ -82,9 +83,9 @@ class {{ class }}
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \{{ namespacedUserModel }}  $user
-     * @param  \{{ namespacedUserModel }}  ${{ modelVariable }}
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  {{ model }}  $user
+     * @param  {{ model }}  ${{ modelVariable }}
+     * @return Response|bool
      */
     public function forceDelete({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {

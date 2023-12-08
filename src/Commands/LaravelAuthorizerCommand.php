@@ -51,7 +51,7 @@ class LaravelAuthorizerCommand extends Command
             return self::SUCCESS;
         }
 
-        $this->generatePolicy($name, $model);
+        $this->generatePolicy($name, ucfirst($model));
 
         return self::SUCCESS;
     }

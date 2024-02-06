@@ -163,7 +163,7 @@ class LaravelAuthorizerCommand extends Command
     /**
      * Get the class name for the policy.
      *
-     * @param  string  $name The name of the policy
+     * @param  string  $name  The name of the policy
      */
     public function getClassName(string $name): string
     {
@@ -177,7 +177,7 @@ class LaravelAuthorizerCommand extends Command
     /**
      * Get the namespace for the model.
      *
-     * @param  string  $model The name of the model
+     * @param  string  $model  The name of the model
      */
     public function getNamespacedModel(string $model): string
     {

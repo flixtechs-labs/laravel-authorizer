@@ -15,7 +15,7 @@ trait LocatesModels
     /**
      * Get all models.
      */
-    protected function getModels(): Collection
+    public function getModels(): Collection
     {
         return collect(File::allFiles(app_path()))
             ->map(function (SplFileInfo $info) {

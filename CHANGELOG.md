@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.0.7 - 2024-02-06
+
+### What's Changed
+
+* fix: exposed locates models method to facade by @SlimGee in https://github.com/flixtechs-labs/laravel-authorizer/pull/20
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.0.6...0.0.7
+
 ## 0.0.6 - 2024-02-06
 
 ### What's Changed

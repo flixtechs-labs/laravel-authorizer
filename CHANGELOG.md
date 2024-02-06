@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.0.6 - 2024-02-06
+
+### What's Changed
+
+* build(deps): bump aglipanci/laravel-pint-action from 2.3.0 to 2.3.1 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/17
+* fix: variables in stubs by @SlimGee in https://github.com/flixtechs-labs/laravel-authorizer/pull/18
+* feat: exposed locates models method to facade by @SlimGee in https://github.com/flixtechs-labs/laravel-authorizer/pull/19
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.0.5...0.0.06
+
 ## 0.0.5 - 2023-12-08
 
 ### What's Changed

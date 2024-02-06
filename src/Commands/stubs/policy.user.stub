@@ -28,9 +28,9 @@ class {{ class }}
      * @param  {{ model }}  $model
      * @return Response|bool
      */
-    public function view({{ user }} $user, {{ userModel }} $model): bool
+    public function view({{ user }} $user, {{ model }} $model): bool
     {
-        return $user->can('view {{ modelSingularLowerCase }}', $model)
+        return $user->can('view {{ modelSingularLowerCase }}', $model);
     }
 
     /**

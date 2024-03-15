@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.0.9 - 2024-03-15
+
+### What's Changed
+
+* build(deps) bump spatie/laravel-permission to 6.x by @SlimGee in https://github.com/flixtechs-labs/laravel-authorizer/pull/23
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.0.8...0.0.9
+
 ## 0.0.8 - 2024-03-15
 
 ### What's Changed

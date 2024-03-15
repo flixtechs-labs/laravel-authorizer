@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.0.8 - 2024-03-15
+
+### What's Changed
+
+* build(deps): Laravel 11 support by @SlimGee in https://github.com/flixtechs-labs/laravel-authorizer/pull/22
+* build(deps): bump ramsey/composer-install from 2 to 3 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/21
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.0.7...0.0.8
+
 ## 0.0.7 - 2024-02-06
 
 ### What's Changed

@@ -11,8 +11,10 @@ class LaravelAuthorizer
 
     public function getPermissionsFor(string $model): array
     {
-        return array_map(static function (string $permission) use ($model) {
-            return $permission.' '.(Str::contains($permission, 'all') ? Str::of($model)->snake()->plural()->lower() : Str::of($model)->snake()->lower());
+        $chain = Str::of($model)->afterLast('\\');
+
+        return array_map(static function (string $permission) use ($chain) {
+            return $permission.' '.(Str::contains($permission, 'all') ? $chain->snake()->plural()->lower() : $chain->snake()->lower());
         }, config('authorizer.permissions'));
     }
 }

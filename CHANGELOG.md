@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.1.0 - 2024-03-31
+
+### What's Changed
+
+* feat: added the ability to pass a fqcn to getPermissionsFor by @SlimGee in https://github.com/flixtechs-labs/laravel-authorizer/pull/25
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.0.9...0.1.0
+
 ## 0.0.9 - 2024-03-15
 
 ### What's Changed

@@ -6,12 +6,12 @@ use FlixtechsLabs\LaravelAuthorizer\Commands\LaravelAuthorizerCommand;
 
 class LaravelAuthorizerTest extends TestCase
 {
-    public function testCanRunTests(): void
+    public function test_can_run_tests(): void
     {
         $this->assertTrue(true);
     }
 
-    public function testCanRunCommandSuccessfully(): void
+    public function test_can_run_command_successfully(): void
     {
         $this->artisan(LaravelAuthorizerCommand::class, [
             'name' => 'User',
@@ -19,7 +19,7 @@ class LaravelAuthorizerTest extends TestCase
         ])->assertSuccessful();
     }
 
-    public function testCanCreatePolicyWhenCalledWithSpecificPolicyName(): void
+    public function test_can_create_policy_when_called_with_specific_policy_name(): void
     {
         $this->artisan(LaravelAuthorizerCommand::class, [
             'name' => 'Post',
@@ -29,7 +29,7 @@ class LaravelAuthorizerTest extends TestCase
         $this->assertFileExists(base_path('app/Policies/PostPolicy.php'));
     }
 
-    public function testCanAppendPolicyToFilenameEventIfItWasIncludedInPolicyName(): void
+    public function test_can_append_policy_to_filename_event_if_it_was_included_in_policy_name(): void
     {
         $this->artisan(LaravelAuthorizerCommand::class, [
             'name' => 'UserPolicy',
@@ -39,7 +39,7 @@ class LaravelAuthorizerTest extends TestCase
         $this->assertFileExists(base_path('app/Policies/UserPolicy.php'));
     }
 
-    public function testCanGeneratePoliciesForAllModels(): void
+    public function test_can_generate_policies_for_all_models(): void
     {
         collect([
             'User',
@@ -71,7 +71,7 @@ class LaravelAuthorizerTest extends TestCase
         $this->assertFileExists(base_path('app/Policies/OrderItemPolicy.php'));
     }
 
-    public function testCanSkipExistingPolicies(): void
+    public function test_can_skip_existing_policies(): void
     {
         $this->artisan(LaravelAuthorizerCommand::class, [
             'name' => 'User',
@@ -86,7 +86,7 @@ class LaravelAuthorizerTest extends TestCase
         ])->assertSuccessful();
     }
 
-    public function testCanForceCreatePolicyEvenIfItExists(): void
+    public function test_can_force_create_policy_even_if_it_exists(): void
     {
         $this->artisan(LaravelAuthorizerCommand::class, [
             'name' => 'User',

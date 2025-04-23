@@ -92,7 +92,7 @@ class LaravelAuthorizerCommand extends Command
             )
         );
 
-        (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
+        (new Filesystem)->dumpFile($this->getPolicyPath($name), $compiled);
     }
 
     /**
@@ -141,7 +141,7 @@ class LaravelAuthorizerCommand extends Command
             )
         );
 
-        (new Filesystem())->dumpFile($this->getPolicyPath($name), $compiled);
+        (new Filesystem)->dumpFile($this->getPolicyPath($name), $compiled);
     }
 
     /**

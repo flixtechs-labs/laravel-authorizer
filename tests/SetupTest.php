@@ -6,19 +6,19 @@ use FlixtechsLabs\LaravelAuthorizer\Commands\SetupCommand;
 
 class SetupTest extends TestCase
 {
-    public function testCanRunTest(): void
+    public function test_can_run_test(): void
     {
         $this->assertTrue(true);
     }
 
-    public function testCanSetupTheAuthorizerPackage(): void
+    public function test_can_setup_the_authorizer_package(): void
     {
         $this->artisan(SetupCommand::class)
             ->expectsOutput('Setup complete!')
             ->assertSuccessful();
     }
 
-    public function testCanGeneratePermissionsDuringSetup(): void
+    public function test_can_generate_permissions_during_setup(): void
     {
         $this->artisan('make:model', ['name' => 'User'])->assertSuccessful();
 
@@ -31,7 +31,7 @@ class SetupTest extends TestCase
         ]);
     }
 
-    public function testCanGeneratePoliciesDuringSetup(): void
+    public function test_can_generate_policies_during_setup(): void
     {
         $this->artisan('make:model', ['name' => 'User'])->assertSuccessful();
 

@@ -9,12 +9,12 @@ class GeneratePermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCanAlsoRunTests(): void
+    public function test_can_also_run_tests(): void
     {
         $this->assertTrue(true);
     }
 
-    public function testCanGeneratePermissionsForAllModels(): void
+    public function test_can_generate_permissions_for_all_models(): void
     {
         collect([
             'User',
@@ -61,7 +61,7 @@ class GeneratePermissionsTest extends TestCase
         ]);
     }
 
-    public function testCanGeneratePermissionForJustTheSpecifiedModel(): void
+    public function test_can_generate_permission_for_just_the_specified_model(): void
     {
         collect([
             'User',

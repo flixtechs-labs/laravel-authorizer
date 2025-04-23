@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.2.0 - 2025-04-23
+
+### What's Changed
+
+* build(deps): bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/24
+* build(deps): bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/26
+* build(deps): bump dependabot/fetch-metadata from 2.0.0 to 2.1.0 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/27
+* build(deps): bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/28
+* build(deps): bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/29
+* build(deps): bump aglipanci/laravel-pint-action from 2.4 to 2.5 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/30
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.1.0...0.2.0
+
 ## 0.1.0 - 2024-03-31
 
 ### What's Changed

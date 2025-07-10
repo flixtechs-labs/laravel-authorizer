@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-authorizer` will be documented in this file.
 
+## 0.2.1 - 2025-07-10
+
+### What's Changed
+
+* build(deps): bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/31
+* build(deps): bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot in https://github.com/flixtechs-labs/laravel-authorizer/pull/32
+
+**Full Changelog**: https://github.com/flixtechs-labs/laravel-authorizer/compare/0.2.0...0.2.1
+
 ## 0.2.0 - 2025-04-23
 
 ### What's Changed
